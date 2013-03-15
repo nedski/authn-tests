@@ -68,7 +68,7 @@ config.vm.provision :chef_solo do |chef|
 #  chef.roles_path = "../../vagrant-tests/acp-cookbooks/roles"
   chef.data_bags_path = "../../vagrant-tests/acp-cookbooks/data_bags"
   chef.add_recipe "acp_webserver"
-  chef.add_recipe "mellon"
+  chef.add_recipe "authn_tests::mellon"
   # chef.add_role "web"
   #
   #   # You may also specify custom JSON attributes:

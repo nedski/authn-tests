@@ -27,10 +27,9 @@ CREATE TABLE acp_users.users (
 
 -- groups table
 CREATE TABLE acp_users.groups (
- uid varchar(64) NOT NULL,
   idn varchar(8) NOT NULL,
   user_group char(20) NOT NULL,
-  PRIMARY KEY (uid, idn, user_group)
+  PRIMARY KEY (idn, user_group)
 ) ENGINE = INNODB;
 
 -- sessions table
@@ -47,14 +46,14 @@ FOR EACH ROW SET NEW.user_passwd = SHA1(NEW.user_passwd);
 
 -- accounts: one that can do maint, one for Apache that's read-only
 INSERT INTO acp_users.users (uid, idn, user_passwd) values ('testuser1', '00000001', 'testpasswd1');
-INSERT INTO acp_users.groups (uid, idn, user_group) values ('testuser1', '00000001', 'testgroup1');
-INSERT INTO acp_users.groups (uid, idn, user_group) values ('testuser1', '00000001', 'commongroup');
+INSERT INTO acp_users.groups (idn, user_group) values ('00000001', 'testgroup1');
+INSERT INTO acp_users.groups (idn, user_group) values ('00000001', 'commongroup');
 
 INSERT INTO acp_users.users (uid, idn, user_passwd) values ('testuser2', '00000002', 'testpasswd2');
-INSERT INTO acp_users.groups (uid, idn, user_group) values ('testuser2', '00000002', 'testgroup2');
-INSERT INTO acp_users.groups (uid, idn, user_group) values ('testuser2', '00000002', 'commongroup');
+INSERT INTO acp_users.groups (idn, user_group) values ('00000002', 'testgroup2');
+INSERT INTO acp_users.groups (idn, user_group) values ('00000002', 'commongroup');
 
 INSERT INTO acp_users.users (uid, idn, user_passwd) values ('testuser3', '00000003', 'testpasswd3');
-INSERT INTO acp_users.groups (uid, idn, user_group) values ('testuser3', '00000003', 'testgroup3');
-INSERT INTO acp_users.groups (uid, idn, user_group) values ('testuser3', '00000003', 'commongroup');
+INSERT INTO acp_users.groups (idn, user_group) values ('00000003', 'testgroup3');
+INSERT INTO acp_users.groups (idn, user_group) values ('00000003', 'commongroup');
 

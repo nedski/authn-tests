@@ -31,6 +31,9 @@ execute "init-acp-users-database" do
   command "\"#{node['mysql']['mysql_bin']}\" -u root #{node['mysql']['server_root_password'].empty? ? '' : '-p'  }#{node['mysql']['server_root_password']} #{db_name} < /tmp/init_acp_users.sql"
   not_if {::File.exists?('/root/.db_init_finished')}
 end
+apache_module 'info' do
+  enable
+end
 
 apache_site 'default' do
   enable false

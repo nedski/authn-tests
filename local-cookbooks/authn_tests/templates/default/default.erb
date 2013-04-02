@@ -1,11 +1,11 @@
 # Per-module global configuration
 <IfModule mod_auth_mysql.c>
 
-  AuthMySQL_DefaultHost localhost
-  AuthMySQL_DefaultUser root
-  AuthMySQL_DefaultPassword somepassword
-  AuthMySQL_General_DB acp_users
-  # AuthMySQL_Persistent On
+  Auth_MySQL_DefaultHost localhost
+  Auth_MySQL_DefaultUser root
+  Auth_MySQL_DefaultPassword somepassword
+  Auth_MySQL_General_DB acp_users
+  # Auth_MySQL_Persistent On
 
 </IfModule>
 # auth_mysql
@@ -45,15 +45,37 @@
 		<Location /private-user>
 		  AuthName "MySQL Testing"
 		  AuthType Basic
-		  AuthMySQL_Username_Field uid
-		  AuthMySQL_Password_Field user_passwd
-		  AuthMySQL_Password_Table users
-		  AuthMySQL_Group_Table groups
-		  AuthMySQL_Group_Clause ' users.idn = groups.idn '
-		  AuthMySQL_Group_Field user_group
-		  AuthMySQL_Encryption_Types sha1
-		  AuthMySQL On
+		  AuthBasicAuthoritative Off
+		  AuthUserFile /dev/null
+		  Auth_MySQL_Username_Field uid
+		  Auth_MySQL_Password_Field user_passwd
+		  Auth_MySQL_Password_Table users
+		  # Auth_MySQL_Group_Table groups
+		  Auth_MySQL_Empty_Passwords Off
+		  # Auth_MySQL_Group_Clause ' users.idn = groups.idn '
+		  # Auth_MySQL_Group_Field user_group
+		  Auth_MySQL_Encryption_Types SHA1Sum
+		  Auth_MySQL_Authoritative On
+		  Auth_MySQL On
 		 require valid-user
+		</Location>
+
+		<Location /private-group>
+		  AuthName "MySQL Testing"
+		  AuthType Basic
+		  AuthBasicAuthoritative Off
+		  AuthUserFile /dev/null
+		  Auth_MySQL_Username_Field uid
+		  Auth_MySQL_Password_Field user_passwd
+		  Auth_MySQL_Password_Table users
+		  Auth_MySQL_Empty_Passwords Off
+		  Auth_MySQL_Group_Table groups
+		  # Auth_MySQL_Group_Clause ' users.idn = groups.idn '
+		  Auth_MySQL_Group_Field user_group
+		  Auth_MySQL_Encryption_Types SHA1Sum
+		  Auth_MySQL_Authoritative On
+		  Auth_MySQL On
+		 require group testgroup2
 		</Location>
 
 </IfModule>

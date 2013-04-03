@@ -1,0 +1,85 @@
+# Per-module global configuration
+<IfModule mod_auth_mysql.c>
+
+  Auth_MySQL_DefaultHost localhost
+  Auth_MySQL_DefaultUser root
+  Auth_MySQL_DefaultPassword somepassword
+  Auth_MySQL_General_DB acp_users
+  # Auth_MySQL_Persistent On
+
+</IfModule>
+# auth_mysql
+
+### Virtual host configuration
+
+<VirtualHost *:80>
+  ServerName <%= node[:server_name] %>
+  DocumentRoot <%= node[:docroot] %>
+
+  <Directory <%= node[:docroot] %>>
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+
+<IfModule mod_name>
+
+	<Location /private-group>
+		# config for group based access
+		</Location>
+
+		<Location /private-user>
+   			# config for user-based access
+		</Location>
+
+</IfModule>
+
+<IfModule mod_auth_mysql.c>
+
+	<Location /private-group>
+		# config for group based access
+		</Location>
+
+		<Location /private-user>
+		  AuthName "MySQL Testing"
+		  AuthType Basic
+		  AuthBasicAuthoritative Off
+		  AuthUserFile /dev/null
+		  Auth_MySQL_Username_Field uid
+		  Auth_MySQL_Password_Field user_passwd
+		  Auth_MySQL_Password_Table users
+		  # Auth_MySQL_Group_Table groups
+		  Auth_MySQL_Empty_Passwords Off
+		  # Auth_MySQL_Group_Clause ' users.idn = groups.idn '
+		  # Auth_MySQL_Group_Field user_group
+		  Auth_MySQL_Encryption_Types SHA1Sum
+		  Auth_MySQL_Authoritative On
+		  Auth_MySQL On
+		 require valid-user
+		</Location>
+
+		<Location /private-group>
+		  AuthName "MySQL Testing"
+		  AuthType Basic
+		  AuthBasicAuthoritative Off
+		  AuthUserFile /dev/null
+		  Auth_MySQL_Username_Field uid
+		  Auth_MySQL_Password_Field user_passwd
+		  Auth_MySQL_Password_Table users
+		  Auth_MySQL_Empty_Passwords Off
+		  Auth_MySQL_Group_Table groups
+		  # Auth_MySQL_Group_Clause ' users.idn = groups.idn '
+		  Auth_MySQL_Group_Field user_group
+		  Auth_MySQL_Encryption_Types SHA1Sum
+		  Auth_MySQL_Authoritative On
+		  Auth_MySQL On
+		 require group testgroup2
+		</Location>
+
+</IfModule>
+
+  LogLevel debug
+
+</VirtualHost>

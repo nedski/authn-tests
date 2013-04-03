@@ -12,7 +12,7 @@ cookbook_file "/tmp/init_acp_users.sql" do
 end
 
 template '/etc/apache2/sites-available/auth-mysql' do
-  source 'default.erb'
+  source 'auth-mysql.erb'
 end
 
 remote_directory "/var/www/auth-mysql" do

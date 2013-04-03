@@ -1,0 +1,72 @@
+# Per-module global configuration
+<IfModule mod_authn_dbd.c>
+
+    DBDriver mysql
+    DBDParams "dbname=acp_users user=root pass=somepassword host=localhost port=3306"
+
+    DBDMin  4
+    DBDKeep 8
+    DBDMax  20
+    DBDExptime 300
+
+</IfModule>
+# authn_dbd
+
+### Virtual host configuration
+
+<VirtualHost *:80>
+  ServerName <%= node[:server_name] %>
+  DocumentRoot <%= node[:docroot] %>
+
+  <Directory <%= node[:docroot] %>>
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+
+<IfModule mod_authn_dbd.c>
+
+	<Location /private-group>
+		# config for group based access
+		</Location>
+
+		<Location /private-user>
+		  AuthName "mod_authn 2.2 Testing"
+		  AuthType Basic
+		  AuthBasicProvider dbd
+
+		  # core authorization configuration
+		  Require valid-user
+
+		  # mod_authn_dbd SQL query to authenticate a user
+		  AuthDBDUserPWQuery \
+		    "SELECT user_passwd FROM users WHERE uid = %s"
+		  require valid-user
+		</Location>
+
+		<Location /private-group>
+		  # AuthName "MySQL Testing"
+		  # 		  AuthType Basic
+		  # 		  AuthBasicAuthoritative Off
+		  # 		  AuthUserFile /dev/null
+		  # 		  Auth_MySQL_Username_Field uid
+		  # 		  Auth_MySQL_Password_Field user_passwd
+		  # 		  Auth_MySQL_Password_Table users
+		  # 		  Auth_MySQL_Empty_Passwords Off
+		  # 		  Auth_MySQL_Group_Table groups
+		  # 		  # Auth_MySQL_Group_Clause ' users.idn = groups.idn '
+		  # 		  Auth_MySQL_Group_Field user_group
+		  # 		  Auth_MySQL_Encryption_Types SHA1Sum
+		  # 		  Auth_MySQL_Authoritative On
+		  # 		  Auth_MySQL On
+		  # 		 require group testgroup2
+		</Location>
+
+</IfModule>
+# authn_dbd
+
+  LogLevel debug
+
+</VirtualHost>

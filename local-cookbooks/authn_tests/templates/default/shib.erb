@@ -1,0 +1,39 @@
+# Per-module global configuration
+<IfModule mod_apache.cpp>
+  # global shibboleth config here
+</IfModule>
+
+LogLevel debug
+
+### Virtual host configuration
+
+<VirtualHost *:8081>
+  ServerName <%= node[:server_name] %>
+  DocumentRoot <%= node[:docroot] %>
+
+  <Directory <%= node[:docroot] %>>
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+   ErrorLog ${APACHE_LOG_DIR}/error.log
+<IfModule mod_apache.cpp>
+
+	<Location /private-group>
+		AuthType shibboleth
+		ShibRequestSetting requireSession 1
+		Require valid-user
+	</Location>
+
+		<Location /private-user>
+   			# config for user-based access
+		</Location>
+
+</IfModule>
+
+
+</VirtualHost>
